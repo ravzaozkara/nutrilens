@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, Integer, Float, String, Boolean, DateTime, Date, ForeignKey, func
 from sqlalchemy.orm import relationship
 from .database import Base
@@ -57,6 +58,6 @@ class Meal(Base):
     fat = Column(Float, default=0)
     health_warnings = Column(String, default="")
     image_path = Column(String, nullable=True)
-    created_at = Column(DateTime, server_default=func.now())
+    created_at = Column(DateTime, default=datetime.now, server_default=func.now())
 
     user = relationship("User", back_populates="meals")

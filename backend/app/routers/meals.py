@@ -1,4 +1,4 @@
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import Optional
@@ -79,6 +79,38 @@ def meal_summary(
         "total_fat": sum(m.fat for m in meals),
         "meal_count": len(meals),
     }
+
+
+@router.get("/weekly-summary", response_model=list[schemas.WeeklyDaySummary])
+def weekly_summary(
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_current_user),
+):
+    """Son 7 günün günlük kalori/makro özetini döndürür (sıfır günleri de dahil)."""
+    today = date.today()
+    result = []
+    for offset in range(6, -1, -1):
+        target_date = today - timedelta(days=offset)
+        start = datetime.combine(target_date, time.min)
+        end = datetime.combine(target_date, time.max)
+        meals = (
+            db.query(models.Meal)
+            .filter(
+                models.Meal.user_id == user.id,
+                models.Meal.created_at >= start,
+                models.Meal.created_at <= end,
+            )
+            .all()
+        )
+        result.append({
+            "date": target_date,
+            "total_calories": sum(m.calories for m in meals),
+            "total_protein": sum(m.protein for m in meals),
+            "total_carbs": sum(m.carbs for m in meals),
+            "total_fat": sum(m.fat for m in meals),
+            "meal_count": len(meals),
+        })
+    return result
 
 
 @router.delete("/{meal_id}")
