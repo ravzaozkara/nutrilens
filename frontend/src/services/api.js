@@ -26,7 +26,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // /auth/password returns 401 for wrong current_password, not expired session —
+    // don't log the user out in that case.
+    const isPasswordChange = error.config?.url?.includes('/auth/password');
+    if (error.response?.status === 401 && !isPasswordChange) {
       localStorage.removeItem('accessToken');
       window.location.href = '/login';
     }

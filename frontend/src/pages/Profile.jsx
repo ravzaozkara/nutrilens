@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { authService } from '../services/authService';
 import { formatDate, getInitials } from '../utils/helpers';
 import { passwordChangeSchema } from '../utils/validators';
 import Card from '../components/common/Card';
@@ -144,13 +145,12 @@ function PasswordChangeModal({ isOpen, onClose }) {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await authService.changePassword(data.currentPassword, data.newPassword);
       toast.success('Şifre başarıyla değiştirildi');
       reset();
       onClose();
     } catch (error) {
-      toast.error('Şifre değiştirilemedi');
+      toast.error(error.response?.data?.detail || 'Mevcut şifre hatalı');
     } finally {
       setLoading(false);
     }
