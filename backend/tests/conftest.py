@@ -45,8 +45,6 @@ def test_user_data():
         "password": "test123456",
         "is_diabetic": True,
         "is_hypertensive": False,
-        "is_high_cholesterol": False,
-        "is_celiac": False,
         "is_kidney_disease": False,
     }
 
@@ -61,10 +59,10 @@ def registered_user(client, test_user_data):
 
 @pytest.fixture
 def auth_headers(client, registered_user, test_user_data):
-    """Kimlik doğrulaması yapılmış Authorization header döndürür."""
+    """Kimlik doğrulaması yapılmış Authorization header döndürür (JSON login)."""
     response = client.post(
         "/auth/login",
-        data={"username": test_user_data["email"], "password": test_user_data["password"]},
+        json={"email": test_user_data["email"], "password": test_user_data["password"]},
     )
     assert response.status_code == 200
     token = response.json()["access_token"]

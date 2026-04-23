@@ -82,3 +82,36 @@ def test_delete_meal_not_found(client, auth_headers):
 def test_meals_unauthorized(client):
     response = client.get("/meals/")
     assert response.status_code == 401
+
+
+# ── /meals/weekly-summary ─────────────────────────────────────────────────────
+
+def test_weekly_summary_empty(client, auth_headers):
+    response = client.get("/meals/weekly-summary", headers=auth_headers)
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 7
+    for day in data:
+        assert day["meal_count"] == 0
+        assert day["total_calories"] == 0.0
+        assert "date" in day
+
+
+def test_weekly_summary_with_meal(client, auth_headers):
+    client.post(
+        "/meals/",
+        json={"food_label": "Mercimek Çorbası", "calories": 65, "protein": 4.2, "carbs": 9.8, "fat": 1.5},
+        headers=auth_headers,
+    )
+    response = client.get("/meals/weekly-summary", headers=auth_headers)
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 7
+    today_entry = data[-1]
+    assert today_entry["meal_count"] == 1
+    assert today_entry["total_calories"] == 65.0
+
+
+def test_weekly_summary_unauthorized(client):
+    response = client.get("/meals/weekly-summary")
+    assert response.status_code == 401
