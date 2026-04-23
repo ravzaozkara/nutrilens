@@ -10,3 +10,8 @@ model/*.pt
 model/*.pth
 .pytest_cache/
 htmlcov/
+
+# SQLite test DB (pytest)
+*.db
+*.db-journal
+test.db
