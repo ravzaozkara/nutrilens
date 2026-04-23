@@ -18,3 +18,7 @@ Thumbs.db
 .env
 .env.local
 *.env.local
+
+# SQLite test databases
+*.db
+backend/test.db
