@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+uploads/*
+!uploads/.gitkeep
+model/*.h5
+model/*.pt
+model/*.pth
+.pytest_cache/
+htmlcov/

@@ -1,0 +1,20 @@
+# Claude Code
+.claude/
+
+# Vite cache (should not be in project root, but just in case)
+.vite/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Just-in-case backups for any .env the subprojects miss
+.env
+.env.local
+*.env.local
