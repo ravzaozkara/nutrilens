@@ -44,6 +44,34 @@
 - **Bug fixed:** `Meal.created_at` was `server_default=func.now()` only. In SQLite tests, the Python ORM did not set the value before INSERT, leaving `created_at=NULL`. Date filters then found 0 meals. Fix: added `default=datetime.now` (local time, consistent with `date.today()` used in filters). `server_default` kept as DB-level fallback.
 - Final result: **34/34 tests pass**.
 
+## Phase 3.1 — authService (2026-04-24)
+
+### Normalization Strategy
+**Decision: normalize snake_case → camelCase in the service layer.**
+All frontend components are built around camelCase (mockData, form defaultValues, component props).
+Changing every component would be invasive and risky; the service layer is the right adapter boundary.
+
+### Field Mappings
+
+| Backend (snake_case) | Frontend (camelCase) |
+|----------------------|----------------------|
+| `birth_date` | `birthDate` |
+| `height_cm` | `height` |
+| `weight_kg` | `weight` |
+| `health_conditions: ["kidney_disease"]` | `healthConditions: ["kidney"]` |
+| `daily_calorie_goal` | `goals.dailyCalories` |
+| `protein_goal` | `goals.protein` |
+| `carbs_goal` | `goals.carbs` |
+| `fat_goal` | `goals.fat` |
+
+`kidney_disease` → `kidney` remapping: the frontend `HEALTH_CONDITIONS` constant uses `id: 'kidney'`; the backend returns `"kidney_disease"`. Normalized in `normalizeUser()`.
+
+### Other Wiring Decisions
+- **login()**: After POST `/auth/login` gets `access_token`, temporarily stores it in localStorage, calls `getMe()` to get full normalized user shape. Returns `{accessToken, user}` as `AuthContext.login()` expects.
+- **register()**: Backend `/auth/register` returns the user but no token. Service auto-calls `/auth/login` immediately after, then `getMe()`. One round-trip more, but `AuthContext` contract unchanged.
+- **changePassword()**: Sends `{current_password, new_password}` (snake_case). `Profile.jsx PasswordChangeModal` was using its own inline mock — wired to `authService.changePassword`.
+- **api.js interceptor**: Global 401 handler (logout + redirect) now skips the `/auth/password` endpoint. Wrong current_password returns 401 from backend, but that's a validation error (user IS authenticated), not an expired session. Without this fix, wrong password would silently log the user out.
+
 ## Endpoints Live After Phase 2
 
 | Method | Path | Auth | Notes |
