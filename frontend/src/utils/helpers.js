@@ -1,19 +1,25 @@
-import { format, formatDistanceToNow, parseISO, isToday, isThisWeek, isThisMonth } from 'date-fns';
+import { format, formatDistanceToNow, parseISO, isToday, isThisWeek, isThisMonth, isValid } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { BMI_CATEGORIES, NUTRITION_THRESHOLDS } from './constants';
 
 export function formatDate(date, formatStr = 'dd MMMM yyyy') {
+  if (!date) return '';
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
+  if (!isValid(dateObj)) return '';
   return format(dateObj, formatStr, { locale: tr });
 }
 
 export function formatDateTime(date) {
+  if (!date) return '';
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
+  if (!isValid(dateObj)) return '';
   return format(dateObj, 'dd MMMM HH:mm', { locale: tr });
 }
 
 export function timeAgo(date) {
+  if (!date) return '';
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
+  if (!isValid(dateObj)) return '';
   return formatDistanceToNow(dateObj, { addSuffix: true, locale: tr });
 }
 

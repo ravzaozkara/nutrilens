@@ -11,6 +11,7 @@ function normalizeUser(data) {
     id: data.id,
     email: data.email,
     name: data.name,
+    createdAt: data.created_at,
     birthDate: data.birth_date,
     gender: data.gender,
     height: data.height_cm,
