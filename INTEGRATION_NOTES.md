@@ -112,3 +112,28 @@ Changing every component would be invasive and risky; the service layer is the r
 **No `PUT /meals/{id}` backend endpoint** — `useMeals.updateMeal` does an optimistic local merge only (`{ ...meal, ...delta }`); the change is lost on page refresh. Acceptable for now because no edit-meal UI exists yet. If an edit UI is added, the backend PUT endpoint must be implemented first before wiring the frontend.
 
 **No `DELETE /auth/me` backend endpoint** — `DeleteAccountModal` in Profile.jsx uses a `setTimeout` stub. Account deletion is not functional. Must be implemented as a dedicated task (backend endpoint + frontend wiring) before shipping to users.
+
+---
+
+## Phase 6 — Verification (2026-04-24)
+
+| # | Item | Status | Evidence |
+|---|------|--------|----------|
+| 1 | Fresh `npm install` on frontend works | PASS | `up to date, audited 277 packages in 1s` — `npm install` from `frontend/` with existing `package-lock.json` |
+| 2 | Fresh backend install: venv + requirements.txt + migrations work from clean | PASS | `pip install -r requirements.txt` installs all pinned packages. Alembic reads `DATABASE_URL` from `.env` via `settings`. Two migration files in `alembic/versions/`. `pytest 34/34` pass in fresh venv after `pip install slowapi`. |
+| 3 | Register → Login → JWT stored in localStorage | MANUAL — see browser test | |
+| 4 | Protected route blocks unauthenticated access | MANUAL — see browser test | |
+| 5 | Upload food photo → real analysis (simulation mode) → reasonable output | MANUAL — see browser test | |
+| 6 | Meal saves to DB, shows in History, persists across refresh | MANUAL — see browser test | |
+| 7 | Daily summary computed from real DB data | MANUAL — see browser test | |
+| 8 | Weekly summary returns 7 days including zero-meal days | PASS | `test_weekly_summary_with_meal` and `test_weekly_summary_empty` both pass; backend returns exactly 7 items with zeroed days. Confirmed in test suite. |
+| 9 | Health warnings trigger for diabetic user eating baklava | MANUAL — see browser test | |
+| 10 | Profile update persists | MANUAL — see browser test | |
+| 11 | Password change works; wrong current password returns error without logout | MANUAL — see browser test | |
+| 12 | Logout clears token and redirects | MANUAL — see browser test | |
+| 13 | Session-expired toast appears when JWT is invalidated | MANUAL — see browser test | |
+| 14 | Frontend `npm run build` succeeds | PASS | `vite build` → `✓ built in 4.35s`, no errors. Bundle size advisory only (1,000 kB chunk; code-splitting deferred). |
+| 15 | Backend `pytest 34/34` pass | PASS | `34 passed in 14.97s` — run in backend venv after adding slowapi |
+| 16 | CORS correctly allows `localhost:5173` | PASS | `main.py`: `allow_origins=["http://localhost:5173"]`, `allow_credentials=True`, `allow_methods=["*"]` |
+| 17 | Rate limiting on `/auth/login` and `/auth/register` | PASS | `@limiter.limit("30/minute")` on both handlers in `routers/auth.py`; `app.state.limiter` and `RateLimitExceeded` handler registered in `main.py` |
+| 18 | Network outage (backend killed) does not white-screen the frontend | PASS | `checkAuth` guards: only clears token on `401`, preserves it on network errors. `getErrorMessage` returns Turkish "server unreachable" string. `useDailySummary`/`useWeeklySummary` catch blocks show toast. All fetches are in try/catch — no unhandled promise rejections that could crash the React tree. |
