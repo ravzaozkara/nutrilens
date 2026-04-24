@@ -54,12 +54,11 @@ export function useMeals(initialParams = {}) {
 
   const updateMeal = async (id, data) => {
     try {
-      const updatedMeal = await mealService.updateMeal(id, data);
+      await mealService.updateMeal(id, data);
       setMeals(prevMeals =>
-        prevMeals.map(meal => (meal.id === id ? updatedMeal : meal))
+        prevMeals.map(meal => (meal.id === id ? { ...meal, ...data } : meal))
       );
       toast.success('Yemek başarıyla güncellendi');
-      return updatedMeal;
     } catch (err) {
       toast.error('Yemek güncellenirken bir hata oluştu');
       throw err;
