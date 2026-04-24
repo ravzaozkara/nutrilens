@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/authService';
+import { getErrorMessage } from '../services/api';
 import { formatDate, getInitials } from '../utils/helpers';
 import { passwordChangeSchema } from '../utils/validators';
 import Card from '../components/common/Card';
@@ -28,7 +29,7 @@ export default function Profile() {
       await updateProfile(data);
       toast.success('Profil güncellendi');
     } catch (error) {
-      toast.error('Profil güncellenirken bir hata oluştu');
+      toast.error(getErrorMessage(error, 'Profil güncellenirken bir hata oluştu'));
     } finally {
       setLoading(false);
     }
@@ -152,7 +153,7 @@ function PasswordChangeModal({ isOpen, onClose }) {
       reset();
       onClose();
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Mevcut şifre hatalı');
+      toast.error(getErrorMessage(error, 'Mevcut şifre hatalı'));
     } finally {
       setLoading(false);
     }

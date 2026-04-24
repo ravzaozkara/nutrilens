@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { getErrorMessage } from '../services/api';
 import { loginSchema } from '../utils/validators';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
@@ -17,6 +18,13 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const from = location.state?.from?.pathname || '/dashboard';
+
+  useEffect(() => {
+    if (sessionStorage.getItem('session_expired')) {
+      sessionStorage.removeItem('session_expired');
+      toast.error('Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
+    }
+  }, []);
 
   const {
     register,
@@ -37,7 +45,7 @@ export default function Login() {
       toast.success('Giriş başarılı!');
       navigate(from, { replace: true });
     } catch (error) {
-      toast.error(error.message || 'Giriş yapılırken bir hata oluştu');
+      toast.error(getErrorMessage(error, 'Giriş yapılırken bir hata oluştu'));
     } finally {
       setLoading(false);
     }

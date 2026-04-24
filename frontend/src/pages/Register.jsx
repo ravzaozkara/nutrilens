@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { getErrorMessage } from '../services/api';
 import {
   registerStep1Schema,
   registerStep2Schema,
@@ -83,7 +84,7 @@ export default function Register() {
         toast.success('Hesabınız oluşturuldu!');
         navigate('/dashboard');
       } catch (error) {
-        toast.error(error.message || 'Kayıt yapılırken bir hata oluştu');
+        toast.error(getErrorMessage(error, 'Kayıt yapılırken bir hata oluştu'));
       } finally {
         setLoading(false);
       }

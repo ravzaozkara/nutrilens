@@ -19,7 +19,10 @@ export function AuthProvider({ children }) {
         setUser(userData);
       }
     } catch (error) {
-      localStorage.removeItem('accessToken');
+      // Only clear token on 401 (invalid/expired); preserve it on network failures
+      if (error.response?.status === 401) {
+        localStorage.removeItem('accessToken');
+      }
     } finally {
       setLoading(false);
     }

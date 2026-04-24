@@ -86,7 +86,7 @@ export function useDailySummary() {
         const data = await mealService.getSummary('daily');
         setSummary(data);
       } catch (err) {
-        console.error('Error fetching summary:', err);
+        toast.error('Günlük özet yüklenemedi');
       } finally {
         setLoading(false);
       }
@@ -107,7 +107,7 @@ export function useWeeklySummary() {
         const weeklyData = await mealService.getSummary('weekly');
         setData(weeklyData);
       } catch (err) {
-        console.error('Error fetching weekly data:', err);
+        toast.error('Haftalık özet yüklenemedi');
       } finally {
         setLoading(false);
       }
