@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 
 from ..database import get_db
 from .. import crud, security, schemas, models
 from ..dependencies import get_current_user
+from ..limiter import limiter
 
 router = APIRouter(
     prefix="/auth",
@@ -34,7 +35,8 @@ def _build_health_conditions(user: models.User) -> list[str]:
 
 
 @router.post("/register", response_model=schemas.User)
-def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
+@limiter.limit("30/minute")
+def register(request: Request, user: schemas.UserCreate, db: Session = Depends(get_db)):
     existing = crud.get_user_by_email(db, user.email)
     if existing:
         raise HTTPException(
@@ -45,7 +47,8 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login")
-def login(body: schemas.LoginRequest, db: Session = Depends(get_db)):
+@limiter.limit("30/minute")
+def login(request: Request, body: schemas.LoginRequest, db: Session = Depends(get_db)):
     """Frontend JSON login: {email, password} → {access_token, token_type}"""
     user = _authenticate_user(db, body.email, body.password)
     access_token = security.create_access_token(data={"sub": user.email})
