@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 import os
 
@@ -50,12 +51,22 @@ app.include_router(meals.router)
 
 
 @app.get("/")
-def health_check():
+def health_check(db: Session = Depends(get_db)):
+    # DB probe — must not raise; catch everything
+    try:
+        db.execute(text("SELECT 1"))
+        database_status = "connected"
+    except Exception:
+        database_status = "disconnected"
+
+    from .core.config import settings
+    ai_model_status = "loaded" if os.path.exists(settings.MODEL_PATH) else "simulation"
+
     return {
         "status": "ok",
-        "service": "NutriLens API",
+        "database": database_status,
+        "ai_model": ai_model_status,
         "version": "1.0.0",
-        "food_count": len(NUTRITION_DB),
     }
 
 
