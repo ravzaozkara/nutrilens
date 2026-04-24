@@ -89,4 +89,8 @@ Changing every component would be invasive and risky; the service layer is the r
 | GET | `/meals/weekly-summary` | Bearer | 7-day array |
 | DELETE | `/meals/{id}` | Bearer | Delete own meal |
 | POST | `/analyze/text` | Bearer | Text food analysis |
-| POST | `/analyze/image` | Bearer | Image food analysis |
+| POST | `/analyze-image` | Bearer | Image food analysis (multipart, field: `file`) |
+
+## Technical Debt
+
+**No `PUT /meals/{id}` backend endpoint** — `useMeals.updateMeal` does an optimistic local merge only (`{ ...meal, ...delta }`); the change is lost on page refresh. Acceptable for now because no edit-meal UI exists yet. If an edit UI is added, the backend PUT endpoint must be implemented first before wiring the frontend.

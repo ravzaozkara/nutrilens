@@ -11,10 +11,9 @@ const nutritionLabels = {
 
 export default function NutritionTable({ nutrition, portion = 1 }) {
   const adjustedNutrition = Object.fromEntries(
-    Object.entries(nutrition).map(([key, value]) => [
-      key,
-      Math.round(value * portion),
-    ])
+    Object.entries(nutrition)
+      .filter(([, value]) => value != null)
+      .map(([key, value]) => [key, Math.round(value * portion)])
   );
 
   return (
