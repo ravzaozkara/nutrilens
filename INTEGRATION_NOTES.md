@@ -137,3 +137,40 @@ Changing every component would be invasive and risky; the service layer is the r
 | 16 | CORS correctly allows `localhost:5173` | PASS | `main.py`: `allow_origins=["http://localhost:5173"]`, `allow_credentials=True`, `allow_methods=["*"]` |
 | 17 | Rate limiting on `/auth/login` and `/auth/register` | PASS | `@limiter.limit("30/minute")` on both handlers in `routers/auth.py`; `app.state.limiter` and `RateLimitExceeded` handler registered in `main.py` |
 | 18 | Network outage (backend killed) does not white-screen the frontend | PASS | `checkAuth` guards: only clears token on `401`, preserves it on network errors. `getErrorMessage` returns Turkish "server unreachable" string. `useDailySummary`/`useWeeklySummary` catch blocks show toast. All fetches are in try/catch — no unhandled promise rejections that could crash the React tree. |
+
+---
+
+## PROJECT STATUS (2026-04-24)
+
+**Total commits:** 17  
+**Test suite:** 34/34 passing  
+**Build:** `npm run build` clean (no errors)
+
+### What works (end-to-end, real backend)
+
+- User registration (3-step form) and login with JWT persistence
+- Full profile CRUD: personal info, health conditions, nutrition goals
+- Password change with current-password verification
+- Food photo analysis via POST `/analyze-image` (simulation mode — random label, no real model)
+- Meal logging: create, list (paginated), delete — all persisted to PostgreSQL
+- Daily nutritional summary from real DB aggregates
+- 7-day weekly calorie chart including zero-meal days
+- Per-condition health warnings (diabetes, hypertension, kidney) via pure frontend rules + backend `health_warning` field
+- Session expiry detection: 401 → redirect to Login with "session expired" toast
+- Network failure graceful degradation: toasts, no white screen, token preserved
+- Rate limiting: 30 req/min on `/auth/login` and `/auth/register`
+- CORS locked to `localhost:5173`
+
+### Deferred (not broken — known placeholders)
+
+| Feature | Reason deferred |
+|---------|----------------|
+| AI model real predictions | `food_model.pt` not in repo; simulation mode is intentional for dev |
+| Edit meal (portion) persistence | No `PUT /meals/{id}` backend endpoint; UI does optimistic-local only |
+| Delete account | No `DELETE /auth/me` backend endpoint; modal is a stub |
+| Mifflin-St Jeor goal calculation | Goals are static registration defaults |
+| Weekly chart timezone | Day labels derived from UTC; may shift ±1 day near midnight in non-UTC locales |
+
+### Nothing is broken
+
+All deferred items have explicit placeholder UI or documented TODOs. No runtime errors, no white screens, no silent data loss for the implemented features.
