@@ -91,6 +91,24 @@ Changing every component would be invasive and risky; the service layer is the r
 | POST | `/analyze/text` | Bearer | Text food analysis |
 | POST | `/analyze-image` | Bearer | Image food analysis (multipart, field: `file`) |
 
+## Phase 4.2 — Data Persistence Audit (2026-04-24)
+
+| Page / Feature | Persistence mechanism | Status |
+|---|---|---|
+| Dashboard | `useDailySummary`, `useWeeklySummary`, `useMeals` — each has `useEffect` that fetches on mount | ✓ Real API |
+| History | `useMeals` hook fetches on mount | ✓ Real API |
+| Profile display | `AuthContext.checkAuth()` calls `authService.getMe()` on mount; token persisted in `localStorage` | ✓ Real API |
+| Auth across refresh | `checkAuth()` reads `localStorage.accessToken` → `authService.getMe()` on every app mount | ✓ Persists |
+| Meal creation | `mealService.createMeal()` → `POST /meals/` | ✓ Real API |
+| Profile update | `authService.updateProfile()` → `PUT /auth/profile` | ✓ Real API |
+| Password change | `authService.changePassword()` → `PUT /auth/password` (no leftover mock) | ✓ Real API |
+| Edit meal portion | `useMeals.updateMeal` — local merge only, no backend call | ⚠ See tech debt |
+| Delete account | `DeleteAccountModal` uses `setTimeout` stub — **no backend endpoint exists** | ✗ Mock only |
+
+**No action taken on delete account**: no `DELETE /auth/me` (or equivalent) endpoint exists in the backend. The modal is an intentional placeholder. Adding the endpoint is Phase 5+ scope.
+
 ## Technical Debt
 
 **No `PUT /meals/{id}` backend endpoint** — `useMeals.updateMeal` does an optimistic local merge only (`{ ...meal, ...delta }`); the change is lost on page refresh. Acceptable for now because no edit-meal UI exists yet. If an edit UI is added, the backend PUT endpoint must be implemented first before wiring the frontend.
+
+**No `DELETE /auth/me` backend endpoint** — `DeleteAccountModal` in Profile.jsx uses a `setTimeout` stub. Account deletion is not functional. Must be implemented as a dedicated task (backend endpoint + frontend wiring) before shipping to users.

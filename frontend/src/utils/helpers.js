@@ -1,6 +1,6 @@
 import { format, formatDistanceToNow, parseISO, isToday, isThisWeek, isThisMonth, isValid } from 'date-fns';
 import { tr } from 'date-fns/locale';
-import { BMI_CATEGORIES, NUTRITION_THRESHOLDS } from './constants';
+import { BMI_CATEGORIES } from './constants';
 
 export function formatDate(date, formatStr = 'dd MMMM yyyy') {
   if (!date) return '';
@@ -48,53 +48,6 @@ export function getCalorieStatus(consumed, target) {
   if (percentage <= 80) return { color: 'text-green-600', bgColor: 'bg-green-500' };
   if (percentage <= 100) return { color: 'text-yellow-600', bgColor: 'bg-yellow-500' };
   return { color: 'text-red-600', bgColor: 'bg-red-500' };
-}
-
-export function getHealthWarnings(nutrition, healthConditions) {
-  const warnings = [];
-
-  // Early return if inputs are invalid
-  if (!nutrition || !healthConditions || !Array.isArray(healthConditions)) {
-    return warnings;
-  }
-
-  if (healthConditions.includes('diabetes')) {
-    const carbs = nutrition.carbs ?? 0;
-    if (carbs > NUTRITION_THRESHOLDS.diabetes.carbs) {
-      warnings.push({
-        type: 'diabetes',
-        severity: 'high',
-        message: `Diyabet Uyarısı: Yüksek karbonhidrat içeriği (${carbs}g). Kan şekerinizi takip edin.`,
-        color: 'border-red-500 bg-red-50',
-      });
-    }
-  }
-
-  if (healthConditions.includes('hypertension')) {
-    const sodium = nutrition.sodium ?? 0;
-    if (sodium > NUTRITION_THRESHOLDS.hypertension.sodium) {
-      warnings.push({
-        type: 'hypertension',
-        severity: 'medium',
-        message: `Tansiyon Uyarısı: Yüksek sodyum içeriği (${sodium}mg). Tuz alımınıza dikkat edin.`,
-        color: 'border-orange-500 bg-orange-50',
-      });
-    }
-  }
-
-  if (healthConditions.includes('kidney')) {
-    const protein = nutrition.protein ?? 0;
-    if (protein > NUTRITION_THRESHOLDS.kidney.protein) {
-      warnings.push({
-        type: 'kidney',
-        severity: 'medium',
-        message: `Böbrek Uyarısı: Orta düzey protein (${protein}g). Diyetisyeninize danışın.`,
-        color: 'border-yellow-500 bg-yellow-50',
-      });
-    }
-  }
-
-  return warnings;
 }
 
 export function filterMealsByDate(meals, filter) {

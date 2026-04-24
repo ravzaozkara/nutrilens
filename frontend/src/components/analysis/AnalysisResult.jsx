@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { getHealthWarnings } from '../../utils/helpers';
+import { evaluateHealthRules } from '../../utils/healthRules';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import PortionSelector from './PortionSelector';
@@ -14,15 +14,26 @@ export default function AnalysisResult({ result, onSave, onReset, saving }) {
   const navigate = useNavigate();
   const [portion, setPortion] = useState(1);
 
-  const warnings = getHealthWarnings(
-    {
-      ...result.nutrition,
-      protein: result.nutrition.protein * portion,
-      carbs: result.nutrition.carbs * portion,
-      sodium: result.nutrition.sodium * portion,
-    },
+  // Portion-adjusted nutrition (null fields filtered so heuristics get 0, not NaN)
+  const adjustedNutrition = Object.fromEntries(
+    Object.entries(result.nutrition)
+      .filter(([, v]) => v != null)
+      .map(([k, v]) => [k, Math.round(v * portion)])
+  );
+
+  // Backend warnings (from /analyze-image) shown first — they reflect real food data
+  const backendWarnings = (result.warnings || []).map(msg => ({
+    severity: 'high',
+    condition: 'backend',
+    message: msg,
+  }));
+
+  const frontendWarnings = evaluateHealthRules(
+    { foodName: result.foodName, nutrition: adjustedNutrition },
     user?.healthConditions || []
   );
+
+  const warnings = [...backendWarnings, ...frontendWarnings];
 
   const handleSave = async () => {
     const mealData = {
