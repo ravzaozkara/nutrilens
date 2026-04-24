@@ -1,0 +1,144 @@
+@baseUrl = http://localhost:8000
+
+# After calling POST /auth/login, copy the access_token value and paste it below.
+# Token expires in 60 minutes (ACCESS_TOKEN_EXPIRE_MINUTES in .env).
+@token = paste_access_token_here
+
+
+# ── Health Check ──────────────────────────────────────────────────────────────
+
+### GET / — Health check (no auth required)
+GET {{baseUrl}}/
+Accept: application/json
+
+
+# ── Auth ──────────────────────────────────────────────────────────────────────
+
+### POST /auth/register — Create a new user account
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "demo@nutrilens.com",
+  "password": "demo123456",
+  "name": "Demo Kullanıcı",
+  "birth_date": "1990-06-15",
+  "gender": "female",
+  "height_cm": 165.0,
+  "weight_kg": 65.0,
+  "is_diabetic": true,
+  "is_hypertensive": false,
+  "is_kidney_disease": false
+}
+
+### POST /auth/login — Authenticate and receive a JWT
+# Copy the returned access_token into the @token variable above.
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "demo@nutrilens.com",
+  "password": "demo123456"
+}
+
+### GET /auth/me — Get current user profile
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### PUT /auth/profile — Update profile fields (all fields optional)
+PUT {{baseUrl}}/auth/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Demo Kullanıcı (Güncel)",
+  "weight_kg": 63.5,
+  "daily_calorie_goal": 1800.0,
+  "protein_goal": 120.0,
+  "carbs_goal": 200.0,
+  "fat_goal": 60.0
+}
+
+### PUT /auth/password — Change password
+PUT {{baseUrl}}/auth/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "current_password": "demo123456",
+  "new_password": "newSecurePass99"
+}
+
+
+# ── Food Analysis ─────────────────────────────────────────────────────────────
+
+### POST /analyze-image — Analyze a food photo (multipart/form-data)
+# Replace the file path below with a real image file on your machine.
+# VS Code REST Client: use the < syntax to attach a local file.
+# The backend expects field name "file" (not "image").
+#
+# Example (replace path):
+#   POST {{baseUrl}}/analyze-image
+#   Authorization: Bearer {{token}}
+#   Content-Type: multipart/form-data; boundary=----Boundary
+#
+#   ------Boundary
+#   Content-Disposition: form-data; name="file"; filename="meal.jpg"
+#   Content-Type: image/jpeg
+#
+#   < /absolute/path/to/your/meal.jpg
+#   ------Boundary--
+#
+# In the VS Code REST Client, use:
+POST {{baseUrl}}/analyze-image
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----Boundary
+
+------Boundary
+Content-Disposition: form-data; name="file"; filename="meal.jpg"
+Content-Type: image/jpeg
+
+< ./sample_meal.jpg
+------Boundary--
+
+
+# ── Meals ─────────────────────────────────────────────────────────────────────
+
+### GET /meals/ — List today's meals (paginated)
+GET {{baseUrl}}/meals/?skip=0&limit=10
+Authorization: Bearer {{token}}
+
+### GET /meals/ — List meals for a specific date
+GET {{baseUrl}}/meals/?date=2026-04-24&skip=0&limit=20
+Authorization: Bearer {{token}}
+
+### POST /meals/ — Save a meal (typically after analysis)
+POST {{baseUrl}}/meals/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "food_label": "Baklava",
+  "calories": 428.0,
+  "protein": 6.5,
+  "carbs": 55.0,
+  "fat": 22.0,
+  "health_warnings": "Aşırı şeker içerir. Diyabetik kullanıcılar dikkatli olmalı.",
+  "image_path": null
+}
+
+### GET /meals/summary — Daily nutritional totals (defaults to today)
+GET {{baseUrl}}/meals/summary
+Authorization: Bearer {{token}}
+
+### GET /meals/summary — Summary for a specific date
+GET {{baseUrl}}/meals/summary?date=2026-04-24
+Authorization: Bearer {{token}}
+
+### GET /meals/weekly-summary — Last 7 days (zero-filled days included)
+GET {{baseUrl}}/meals/weekly-summary
+Authorization: Bearer {{token}}
+
+### DELETE /meals/{id} — Delete a meal by ID (replace 1 with a real ID)
+DELETE {{baseUrl}}/meals/1
+Authorization: Bearer {{token}}
