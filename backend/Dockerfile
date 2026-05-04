@@ -19,4 +19,7 @@ RUN mkdir -p /app/uploads
 
 EXPOSE ${PORT:-8000}
 
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# NOTE: alembic upgrade head was here; removed temporarily because the
+# Railway-hosted DB has already been migrated by the previous deploy.
+# Re-enable once we're sure new migrations run cleanly.
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
