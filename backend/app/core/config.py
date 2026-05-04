@@ -13,9 +13,11 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "nutrilens_gizli_anahtar_buraya"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    MODEL_PATH: str = os.path.join(os.path.dirname(__file__), "..", "..", "model", "food_model.pt")
+    MODEL_PATH: str = os.path.join(os.path.dirname(__file__), "..", "..", "model", "best_model_final.pth")
     CONFIDENCE_THRESHOLD: float = 0.50
     MAX_IMAGE_SIZE_MB: int = 10
+    ALLOWED_ORIGINS: str = ""
+    PORT: int = 8000
 
 
 settings = Settings()

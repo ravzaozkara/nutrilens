@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 import os
 
 from . import models
+from .core.config import settings
 from .database import get_db
 from .limiter import limiter
 from .routers import auth, analyze, meals
@@ -34,9 +35,15 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+_allowed_origins_csv = settings.ALLOWED_ORIGINS.strip()
+if _allowed_origins_csv:
+    allowed_origins = [origin.strip() for origin in _allowed_origins_csv.split(",") if origin.strip()]
+else:
+    allowed_origins = ["http://localhost:5173", "http://localhost:3000"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -59,7 +66,6 @@ def health_check(db: Session = Depends(get_db)):
     except Exception:
         database_status = "disconnected"
 
-    from .core.config import settings
     ai_model_status = "loaded" if os.path.exists(settings.MODEL_PATH) else "simulation"
 
     return {
