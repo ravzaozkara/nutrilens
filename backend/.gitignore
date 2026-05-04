@@ -1,17 +1,55 @@
-venv/
+# Environment
+.env
+.env.local
+*.env
+!.env.example
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+test.db
+
+# Uploads
+uploads/
+
+# OS
 .DS_Store
-.env
-uploads/*
-!uploads/.gitkeep
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+
+# AI model artifacts — ignore all checkpoints by default
 model/*.h5
 model/*.pt
 model/*.pth
-.pytest_cache/
-htmlcov/
-
-# SQLite test DB (pytest)
-*.db
-*.db-journal
-test.db
+model/*.ckpt
+# ...except the production checkpoint and class labels
+!model/best_model_final.pth
+!model/classes.json
