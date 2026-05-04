@@ -4,7 +4,7 @@
 # Model çıkış sınıfları (eğitim sırasına göre, snake_case)
 CLASS_NAMES = [
     # Ana Yemekler (12)
-    "kuru_fasulye", "karniyanik", "bulgur_pilavi", "pirinc_pilavi",
+    "kuru_fasulye", "karniyarik", "bulgur_pilavi", "pirinc_pilavi",
     "kofte", "makarna", "manti", "lahmacun", "yesil_biber_dolmasi",
     "firinda_tavuk", "adana_kebap", "sarma",
     # Çorbalar (4)
@@ -24,7 +24,7 @@ NUTRITION_DB = {
         "display_name": "Kuru Fasulye",
         "calories": 120, "protein": 8.5, "carbs": 18.0, "fat": 1.8
     },
-    "karniyanik": {
+    "karniyarik": {
         "display_name": "Karnıyarık",
         "calories": 135, "protein": 6.2, "carbs": 8.5, "fat": 9.0
     },
@@ -180,7 +180,7 @@ DISEASE_WARNINGS = {
     "cholesterol": {
         "risky_foods": [
             "sucuklu_yumurta", "borek", "pogaca", "adana_kebap",
-            "baklava", "kunefe", "kofte", "karniyanik", "beyaz_peynir",
+            "baklava", "kunefe", "kofte", "karniyarik", "beyaz_peynir",
             "gozleme"
         ],
         "message": "Bu yemek yüksek doymuş yağ içerebilir. Kolesterol sorununuz olduğu için porsiyon kontrolüne dikkat edin."
