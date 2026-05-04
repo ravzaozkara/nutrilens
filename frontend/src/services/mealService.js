@@ -81,7 +81,7 @@ export const mealService = {
       skip: ((params.page || 1) - 1) * (params.limit || 50),
       limit: params.limit || 50,
     };
-    const { data } = await api.get('/meals', { params: apiParams });
+    const { data } = await api.get('/meals/', { params: apiParams });
     const meals = data.map(normalizeMeal);
     return {
       meals,
@@ -113,7 +113,7 @@ export const mealService = {
       localMeals.unshift(newMeal);
       return newMeal;
     }
-    const { data } = await api.post('/meals', serializeMeal(mealData));
+    const { data } = await api.post('/meals/', serializeMeal(mealData));
     return normalizeMeal(data);
   },
 
