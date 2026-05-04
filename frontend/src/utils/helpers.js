@@ -1,26 +1,26 @@
 import { format, formatDistanceToNow, parseISO, isToday, isThisWeek, isThisMonth, isValid } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { BMI_CATEGORIES } from './constants';
 
 export function formatDate(date, formatStr = 'dd MMMM yyyy') {
   if (!date) return '';
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
   if (!isValid(dateObj)) return '';
-  return format(dateObj, formatStr, { locale: tr });
+  return format(dateObj, formatStr, { locale: enUS });
 }
 
 export function formatDateTime(date) {
   if (!date) return '';
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
   if (!isValid(dateObj)) return '';
-  return format(dateObj, 'dd MMMM HH:mm', { locale: tr });
+  return format(dateObj, 'MMM d, HH:mm', { locale: enUS });
 }
 
 export function timeAgo(date) {
   if (!date) return '';
   const dateObj = typeof date === 'string' ? parseISO(date) : date;
   if (!isValid(dateObj)) return '';
-  return formatDistanceToNow(dateObj, { addSuffix: true, locale: tr });
+  return formatDistanceToNow(dateObj, { addSuffix: true, locale: enUS });
 }
 
 export function calculateBMI(weight, height) {

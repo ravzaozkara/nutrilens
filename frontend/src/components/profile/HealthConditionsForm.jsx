@@ -52,12 +52,12 @@ export default function HealthConditionsForm({ user, onSubmit, loading }) {
 
   return (
     <Card>
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Sağlık Profili</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-6">Health Profile</h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Boy (cm)"
+            label="Height (cm)"
             type="number"
             value={formData.height}
             onChange={(e) => handleChange('height', e.target.value)}
@@ -65,7 +65,7 @@ export default function HealthConditionsForm({ user, onSubmit, loading }) {
             max="250"
           />
           <Input
-            label="Kilo (kg)"
+            label="Weight (kg)"
             type="number"
             value={formData.weight}
             onChange={(e) => handleChange('weight', e.target.value)}
@@ -77,7 +77,7 @@ export default function HealthConditionsForm({ user, onSubmit, loading }) {
         {bmi && (
           <div className="bg-gray-50 rounded-xl p-4">
             <div className="flex items-center justify-between">
-              <span className="text-gray-600">Vücut Kitle İndeksi (VKİ)</span>
+              <span className="text-gray-600">Body Mass Index (BMI)</span>
               <span className={`font-semibold ${bmiCategory?.color}`}>
                 {bmi} - {bmiCategory?.label}
               </span>
@@ -87,7 +87,7 @@ export default function HealthConditionsForm({ user, onSubmit, loading }) {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Sağlık Durumları
+            Health Conditions
           </label>
           <div className="space-y-3">
             {HEALTH_CONDITIONS.map((condition) => (
@@ -113,7 +113,7 @@ export default function HealthConditionsForm({ user, onSubmit, loading }) {
         </div>
 
         <Button type="submit" loading={loading} disabled={!isDirty}>
-          Kaydet
+          Save
         </Button>
       </form>
     </Card>

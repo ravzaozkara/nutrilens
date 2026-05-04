@@ -6,12 +6,12 @@ import { formatDateTime } from '../../utils/helpers';
 import { CameraIcon } from '@heroicons/react/24/outline';
 
 const nutritionLabels = {
-  calories: { label: 'Kalori', unit: 'kcal' },
+  calories: { label: 'Calories', unit: 'kcal' },
   protein: { label: 'Protein', unit: 'g' },
-  carbs: { label: 'Karbonhidrat', unit: 'g' },
-  fat: { label: 'Yağ', unit: 'g' },
-  fiber: { label: 'Lif', unit: 'g' },
-  sodium: { label: 'Sodyum', unit: 'mg' },
+  carbs: { label: 'Carbs', unit: 'g' },
+  fat: { label: 'Fat', unit: 'g' },
+  fiber: { label: 'Fiber', unit: 'g' },
+  sodium: { label: 'Sodium', unit: 'mg' },
 };
 
 export default function MealDetailModal({
@@ -38,7 +38,7 @@ export default function MealDetailModal({
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Bu yemeği silmek istediğinizden emin misiniz?')) {
+    if (window.confirm('Are you sure you want to delete this meal?')) {
       setDeleting(true);
       try {
         await onDelete(meal.id);
@@ -57,7 +57,7 @@ export default function MealDetailModal({
   );
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Yemek Detayları" size="md">
+    <Modal isOpen={isOpen} onClose={onClose} title="Meal Details" size="md">
       <div className="space-y-6">
         {/* Image and basic info */}
         <div className="flex items-start gap-4">
@@ -90,7 +90,7 @@ export default function MealDetailModal({
         {/* Nutrition facts */}
         <div>
           <h4 className="text-sm font-medium text-gray-700 mb-3">
-            Besin Değerleri ({portion} porsiyon)
+            Nutrition Facts ({portion} serving{portion === 1 ? '' : 's'})
           </h4>
           <div className="bg-gray-50 rounded-xl p-4 divide-y divide-gray-200">
             {Object.entries(nutritionLabels).map(([key, { label, unit }]) => {
@@ -120,7 +120,7 @@ export default function MealDetailModal({
             loading={deleting}
             className="flex-1"
           >
-            Sil
+            Delete
           </Button>
           <Button
             onClick={handleUpdate}
@@ -128,7 +128,7 @@ export default function MealDetailModal({
             disabled={portion === meal.portion}
             className="flex-1"
           >
-            Güncelle
+            Update
           </Button>
         </div>
       </div>

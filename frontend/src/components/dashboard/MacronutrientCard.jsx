@@ -32,7 +32,7 @@ export default function MacronutrientCard({ macros }) {
 
   return (
     <Card>
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Makro Besinler</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-6">Macronutrients</h3>
 
       <div className="space-y-5">
         <MacroBar
@@ -42,13 +42,13 @@ export default function MacronutrientCard({ macros }) {
           color="bg-blue-500"
         />
         <MacroBar
-          label="Karbonhidrat"
+          label="Carbs"
           consumed={defaultMacros.carbs.consumed}
           target={defaultMacros.carbs.target}
           color="bg-orange-500"
         />
         <MacroBar
-          label="Yağ"
+          label="Fat"
           consumed={defaultMacros.fat.consumed}
           target={defaultMacros.fat.target}
           color="bg-yellow-500"

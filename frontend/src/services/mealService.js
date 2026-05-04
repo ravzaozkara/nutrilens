@@ -5,8 +5,8 @@ const USE_MOCK = false;
 
 let localMeals = [...mockMeals];
 
-// Backend weekday index → short Turkish abbreviation (Sunday = 0)
-const TURKISH_DAYS = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+// Backend weekday index → short English abbreviation (Sunday = 0)
+const WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 function normalizeMeal(m) {
   return {
@@ -37,7 +37,7 @@ function normalizeDailySummary(data) {
 
 function normalizeWeeklySummary(data) {
   return data.map(item => ({
-    day: TURKISH_DAYS[new Date(item.date).getDay()],
+    day: WEEKDAY_LABELS[new Date(item.date).getDay()],
     calories: item.total_calories ?? 0,
   }));
 }
@@ -95,11 +95,11 @@ export const mealService = {
     if (USE_MOCK) {
       await new Promise(resolve => setTimeout(resolve, 200));
       const meal = localMeals.find(m => m.id === id);
-      if (!meal) throw new Error('Yemek bulunamadı');
+      if (!meal) throw new Error('Meal not found');
       return meal;
     }
     // No GET /meals/{id} endpoint exists; this method is currently unused by any component
-    throw new Error('getMealById desteklenmiyor');
+    throw new Error('getMealById is not supported');
   },
 
   async createMeal(mealData) {
@@ -121,7 +121,7 @@ export const mealService = {
     if (USE_MOCK) {
       await new Promise(resolve => setTimeout(resolve, 400));
       const index = localMeals.findIndex(m => m.id === id);
-      if (index === -1) throw new Error('Yemek bulunamadı');
+      if (index === -1) throw new Error('Meal not found');
       localMeals[index] = { ...localMeals[index], ...mealData };
       return localMeals[index];
     }
@@ -133,7 +133,7 @@ export const mealService = {
     if (USE_MOCK) {
       await new Promise(resolve => setTimeout(resolve, 300));
       const index = localMeals.findIndex(m => m.id === id);
-      if (index === -1) throw new Error('Yemek bulunamadı');
+      if (index === -1) throw new Error('Meal not found');
       localMeals.splice(index, 1);
       return { success: true };
     }

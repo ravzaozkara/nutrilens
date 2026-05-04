@@ -17,9 +17,9 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const navLinks = [
-    { name: 'Ana Sayfa', path: '/dashboard', icon: HomeIcon },
-    { name: 'Geçmiş', path: '/history', icon: ClockIcon },
-    { name: 'Profil', path: '/profile', icon: UserIcon },
+    { name: 'Dashboard', path: '/dashboard', icon: HomeIcon },
+    { name: 'History', path: '/history', icon: ClockIcon },
+    { name: 'Profile', path: '/profile', icon: UserIcon },
   ];
 
   const handleLogout = () => {
@@ -63,7 +63,7 @@ export default function Navbar() {
               className="ml-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
             >
               <CameraIcon className="w-4 h-4" />
-              Analiz Et
+              Analyze
             </Link>
           </div>
 
@@ -114,7 +114,7 @@ export default function Navbar() {
                         )}
                       >
                         <CameraIcon className="w-5 h-5" />
-                        Analiz Et
+                        Analyze
                       </Link>
                     )}
                   </Menu.Item>
@@ -154,7 +154,7 @@ export default function Navbar() {
                           active ? 'bg-gray-50' : ''
                         )}
                       >
-                        Profil
+                        Profile
                       </Link>
                     )}
                   </Menu.Item>
@@ -167,7 +167,7 @@ export default function Navbar() {
                           active ? 'bg-gray-50' : ''
                         )}
                       >
-                        Çıkış Yap
+                        Log Out
                       </button>
                     )}
                   </Menu.Item>

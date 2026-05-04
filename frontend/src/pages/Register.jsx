@@ -18,7 +18,7 @@ import Button from '../components/common/Button';
 import Card from '../components/common/Card';
 import { CheckIcon } from '@heroicons/react/24/solid';
 
-const steps = ['Hesap Bilgileri', 'Kişisel Bilgiler', 'Sağlık Profili'];
+const steps = ['Account Info', 'Personal Info', 'Health Profile'];
 
 export default function Register() {
   const navigate = useNavigate();
@@ -81,10 +81,10 @@ export default function Register() {
           weight: Number(newFormData.weight),
           healthConditions: newFormData.healthConditions,
         });
-        toast.success('Hesabınız oluşturuldu!');
+        toast.success('Your account has been created!');
         navigate('/dashboard');
       } catch (error) {
-        toast.error(getErrorMessage(error, 'Kayıt yapılırken bir hata oluştu'));
+        toast.error(getErrorMessage(error, 'An error occurred while signing up'));
       } finally {
         setLoading(false);
       }
@@ -116,7 +116,7 @@ export default function Register() {
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-          Hesap Oluşturun
+          Create Your Account
         </h2>
 
         {/* Step Indicator */}
@@ -160,18 +160,18 @@ export default function Register() {
             {currentStep === 1 && (
               <>
                 <Input
-                  label="E-posta"
+                  label="Email"
                   type="email"
-                  placeholder="E-posta adresiniz"
+                  placeholder="Your email address"
                   {...register('email')}
                   error={errors.email?.message}
                 />
 
                 <div>
                   <Input
-                    label="Şifre"
+                    label="Password"
                     type="password"
-                    placeholder="Şifreniz"
+                    placeholder="Your password"
                     {...register('password')}
                     error={errors.password?.message}
                   />
@@ -193,9 +193,9 @@ export default function Register() {
                 </div>
 
                 <Input
-                  label="Şifre Tekrar"
+                  label="Confirm Password"
                   type="password"
-                  placeholder="Şifrenizi tekrar girin"
+                  placeholder="Re-enter your password"
                   {...register('confirmPassword')}
                   error={errors.confirmPassword?.message}
                 />
@@ -206,14 +206,14 @@ export default function Register() {
             {currentStep === 2 && (
               <>
                 <Input
-                  label="Ad Soyad"
-                  placeholder="Adınız ve soyadınız"
+                  label="Full Name"
+                  placeholder="Your first and last name"
                   {...register('name')}
                   error={errors.name?.message}
                 />
 
                 <Input
-                  label="Doğum Tarihi"
+                  label="Date of Birth"
                   type="date"
                   {...register('birthDate')}
                   error={errors.birthDate?.message}
@@ -221,7 +221,7 @@ export default function Register() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Cinsiyet
+                    Gender
                   </label>
                   <div className="grid grid-cols-3 gap-3">
                     {GENDER_OPTIONS.map((option) => (
@@ -262,14 +262,14 @@ export default function Register() {
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <Input
-                    label="Boy (cm)"
+                    label="Height (cm)"
                     type="number"
                     placeholder="165"
                     {...register('height', { valueAsNumber: true })}
                     error={errors.height?.message}
                   />
                   <Input
-                    label="Kilo (kg)"
+                    label="Weight (kg)"
                     type="number"
                     placeholder="60"
                     {...register('weight', { valueAsNumber: true })}
@@ -280,7 +280,7 @@ export default function Register() {
                 {bmi && (
                   <div className="bg-gray-50 rounded-xl p-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600">VKİ</span>
+                      <span className="text-gray-600">BMI</span>
                       <span className={`font-semibold ${bmiCategory?.color}`}>
                         {bmi} - {bmiCategory?.label}
                       </span>
@@ -290,7 +290,7 @@ export default function Register() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Sağlık Durumları
+                    Health Conditions
                   </label>
                   <div className="space-y-2">
                     {HEALTH_CONDITIONS.map((condition) => (
@@ -321,7 +321,7 @@ export default function Register() {
                     className="mt-1 h-4 w-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
                   />
                   <span className="text-sm text-gray-600">
-                    Kullanım koşullarını okudum ve kabul ediyorum
+                    I have read and accept the terms of service
                   </span>
                 </label>
                 {errors.acceptTerms && (
@@ -340,7 +340,7 @@ export default function Register() {
                   onClick={goBack}
                   className="flex-1"
                 >
-                  Geri
+                  Back
                 </Button>
               )}
               <Button
@@ -348,18 +348,18 @@ export default function Register() {
                 loading={loading}
                 className={currentStep === 1 ? 'w-full' : 'flex-1'}
               >
-                {currentStep === 3 ? 'Kayıt Ol' : 'Devam'}
+                {currentStep === 3 ? 'Sign Up' : 'Continue'}
               </Button>
             </div>
           </form>
 
           <p className="mt-6 text-center text-sm text-gray-600">
-            Zaten hesabınız var mı?{' '}
+            Already have an account?{' '}
             <Link
               to="/login"
               className="font-medium text-primary-600 hover:text-primary-700"
             >
-              Giriş yapın
+              Sign in
             </Link>
           </p>
         </Card>

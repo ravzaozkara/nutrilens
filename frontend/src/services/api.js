@@ -13,11 +13,11 @@ const api = axios.create({
 
 /**
  * Extracts a user-readable message from an axios error.
- * - No response (network down / timeout) → Turkish "cannot reach server" string
- * - HTTP error → backend's `detail` field if present, else fallback
+ * - No response (network down / timeout) → English "cannot reach server" string
+ * - HTTP error → backend's `detail` field if present (still in Turkish — data layer), else fallback
  */
-export function getErrorMessage(err, fallback = 'Bir hata oluştu') {
-  if (!err.response) return 'Sunucuya ulaşılamıyor. İnternet bağlantınızı kontrol edin.';
+export function getErrorMessage(err, fallback = 'An error occurred') {
+  if (!err.response) return 'Cannot reach the server. Please check your internet connection.';
   return err.response?.data?.detail || err.response?.data?.message || fallback;
 }
 

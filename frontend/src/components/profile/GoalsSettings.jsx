@@ -38,7 +38,7 @@ export default function GoalsSettings({ user, onSubmit, loading }) {
     e.preventDefault();
 
     if (totalMacros !== 100) {
-      setError('Makro besin yüzdeleri toplamı 100 olmalı');
+      setError('Macronutrient percentages must add up to 100');
       return;
     }
 
@@ -57,12 +57,12 @@ export default function GoalsSettings({ user, onSubmit, loading }) {
   return (
     <Card>
       <h3 className="text-lg font-semibold text-gray-900 mb-6">
-        Beslenme Hedefleri
+        Nutrition Goals
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
-          label="Günlük Kalori Hedefi"
+          label="Daily Calorie Goal"
           type="number"
           value={formData.dailyCalories}
           onChange={(e) => handleChange('dailyCalories', Number(e.target.value))}
@@ -72,7 +72,7 @@ export default function GoalsSettings({ user, onSubmit, loading }) {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Hedef Türü
+            Goal Type
           </label>
           <select
             value={formData.goalType}
@@ -89,7 +89,7 @@ export default function GoalsSettings({ user, onSubmit, loading }) {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Makro Dağılımı (%)
+            Macro Distribution (%)
           </label>
           <div className="space-y-4">
             <div>
@@ -109,7 +109,7 @@ export default function GoalsSettings({ user, onSubmit, loading }) {
 
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-600">Karbonhidrat</span>
+                <span className="text-gray-600">Carbs</span>
                 <span className="font-medium">{formData.carbs}%</span>
               </div>
               <input
@@ -124,7 +124,7 @@ export default function GoalsSettings({ user, onSubmit, loading }) {
 
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-600">Yağ</span>
+                <span className="text-gray-600">Fat</span>
                 <span className="font-medium">{formData.fat}%</span>
               </div>
               <input
@@ -143,7 +143,7 @@ export default function GoalsSettings({ user, onSubmit, loading }) {
               totalMacros === 100 ? 'text-green-600' : 'text-red-600'
             }`}
           >
-            Toplam: {totalMacros}% {totalMacros !== 100 && '(100% olmalı)'}
+            Total: {totalMacros}% {totalMacros !== 100 && '(must be 100%)'}
           </div>
         </div>
 
@@ -154,7 +154,7 @@ export default function GoalsSettings({ user, onSubmit, loading }) {
           loading={loading}
           disabled={!isDirty || totalMacros !== 100}
         >
-          Kaydet
+          Save
         </Button>
       </form>
     </Card>

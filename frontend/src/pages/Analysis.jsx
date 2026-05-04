@@ -31,12 +31,12 @@ export default function Analysis() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            {result ? 'Analiz Sonucu' : 'Yemek Fotoğrafı Yükle'}
+            {result ? 'Analysis Result' : 'Upload a Meal Photo'}
           </h1>
           <p className="text-gray-600">
             {result
-              ? 'Besin değerlerini inceleyin ve günlüğe kaydedin'
-              : 'Türk mutfağından bir yemek fotoğrafı yükleyin'}
+              ? 'Review the nutrition facts and save to your log'
+              : 'Upload a photo of a Turkish dish'}
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export default function Analysis() {
           <Loading
             fullScreen
             size="lg"
-            text="Yemeğiniz analiz ediliyor..."
+            text="Analyzing your meal..."
           />
         )}
 

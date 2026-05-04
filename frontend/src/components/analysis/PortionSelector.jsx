@@ -5,7 +5,7 @@ export default function PortionSelector({ value, onChange }) {
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-2">
-        Porsiyon
+        Portion
       </label>
       <div className="flex rounded-xl overflow-hidden border border-gray-300">
         {PORTION_OPTIONS.map((option, index) => (

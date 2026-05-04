@@ -27,9 +27,9 @@ export default function Profile() {
     setLoading(true);
     try {
       await updateProfile(data);
-      toast.success('Profil güncellendi');
+      toast.success('Profile updated');
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Profil güncellenirken bir hata oluştu'));
+      toast.error(getErrorMessage(error, 'An error occurred while updating your profile'));
     } finally {
       setLoading(false);
     }
@@ -56,7 +56,7 @@ export default function Profile() {
               <p className="text-gray-500">{user?.email}</p>
               {formatDate(user?.createdAt, 'MMMM yyyy') && (
                 <p className="text-sm text-gray-400 mt-1">
-                  Üyelik: {formatDate(user.createdAt, 'MMMM yyyy')}'den beri
+                  Member since {formatDate(user.createdAt, 'MMMM yyyy')}
                 </p>
               )}
             </div>
@@ -87,7 +87,7 @@ export default function Profile() {
         {/* Account Settings */}
         <Card>
           <h3 className="text-lg font-semibold text-gray-900 mb-6">
-            Hesap Ayarları
+            Account Settings
           </h3>
 
           <div className="space-y-4">
@@ -96,11 +96,11 @@ export default function Profile() {
               fullWidth
               onClick={() => setPasswordModalOpen(true)}
             >
-              Şifre Değiştir
+              Change Password
             </Button>
 
             <Button variant="secondary" fullWidth onClick={handleLogout}>
-              Çıkış Yap
+              Log Out
             </Button>
 
             <Button
@@ -108,7 +108,7 @@ export default function Profile() {
               fullWidth
               onClick={() => setDeleteModalOpen(true)}
             >
-              Hesabı Sil
+              Delete Account
             </Button>
           </div>
         </Card>
@@ -149,11 +149,11 @@ function PasswordChangeModal({ isOpen, onClose }) {
     setLoading(true);
     try {
       await authService.changePassword(data.currentPassword, data.newPassword);
-      toast.success('Şifre başarıyla değiştirildi');
+      toast.success('Password changed successfully');
       reset();
       onClose();
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Mevcut şifre hatalı'));
+      toast.error(getErrorMessage(error, 'Current password is incorrect'));
     } finally {
       setLoading(false);
     }
@@ -165,22 +165,22 @@ function PasswordChangeModal({ isOpen, onClose }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Şifre Değiştir">
+    <Modal isOpen={isOpen} onClose={handleClose} title="Change Password">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
-          label="Mevcut Şifre"
+          label="Current Password"
           type="password"
           error={errors.currentPassword?.message}
           {...register('currentPassword')}
         />
         <Input
-          label="Yeni Şifre"
+          label="New Password"
           type="password"
           error={errors.newPassword?.message}
           {...register('newPassword')}
         />
         <Input
-          label="Yeni Şifre (Tekrar)"
+          label="Confirm New Password"
           type="password"
           error={errors.confirmPassword?.message}
           {...register('confirmPassword')}
@@ -188,10 +188,10 @@ function PasswordChangeModal({ isOpen, onClose }) {
 
         <div className="flex gap-3 pt-2">
           <Button type="button" variant="secondary" onClick={handleClose} className="flex-1">
-            İptal
+            Cancel
           </Button>
           <Button type="submit" loading={loading} className="flex-1">
-            Kaydet
+            Save
           </Button>
         </div>
       </form>
@@ -212,32 +212,32 @@ function DeleteAccountModal({ isOpen, onClose }) {
     try {
       // Mock API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success('Hesabınız silindi');
+      toast.success('Your account has been deleted');
       logout();
       navigate('/login');
     } catch (error) {
-      toast.error('Hesap silinemedi');
+      toast.error('Could not delete account');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Hesabı Sil">
+    <Modal isOpen={isOpen} onClose={onClose} title="Delete Account">
       <form onSubmit={handleDelete} className="space-y-4">
         <div className="bg-red-50 border border-red-200 rounded-xl p-4">
           <p className="text-sm text-red-800">
-            <strong>Uyarı:</strong> Bu işlem geri alınamaz. Tüm verileriniz
-            kalıcı olarak silinecektir.
+            <strong>Warning:</strong> This action cannot be undone. All of
+            your data will be permanently deleted.
           </p>
         </div>
 
         <Input
-          label="Şifrenizi onaylayın"
+          label="Confirm your password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Şifrenizi girin"
+          placeholder="Enter your password"
         />
 
         <div className="flex gap-3 pt-2">
@@ -247,7 +247,7 @@ function DeleteAccountModal({ isOpen, onClose }) {
             onClick={onClose}
             className="flex-1"
           >
-            İptal
+            Cancel
           </Button>
           <Button
             type="submit"
@@ -256,7 +256,7 @@ function DeleteAccountModal({ isOpen, onClose }) {
             disabled={!password}
             className="flex-1"
           >
-            Hesabımı Sil
+            Delete My Account
           </Button>
         </div>
       </form>

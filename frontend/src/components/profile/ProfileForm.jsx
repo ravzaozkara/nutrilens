@@ -7,9 +7,9 @@ import Button from '../common/Button';
 import { GENDER_OPTIONS } from '../../utils/constants';
 
 const profileSchema = z.object({
-  name: z.string().min(2, 'Ad en az 2 karakter olmalı'),
-  birthDate: z.string().min(1, 'Doğum tarihi gerekli'),
-  gender: z.string().min(1, 'Cinsiyet seçimi gerekli'),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  birthDate: z.string().min(1, 'Date of birth is required'),
+  gender: z.string().min(1, 'Please select a gender'),
 });
 
 export default function ProfileForm({ user, onSubmit, loading }) {
@@ -29,18 +29,18 @@ export default function ProfileForm({ user, onSubmit, loading }) {
   return (
     <Card>
       <h3 className="text-lg font-semibold text-gray-900 mb-6">
-        Kişisel Bilgiler
+        Personal Information
       </h3>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
-          label="Ad Soyad"
+          label="Full Name"
           {...register('name')}
           error={errors.name?.message}
         />
 
         <Input
-          label="Doğum Tarihi"
+          label="Date of Birth"
           type="date"
           {...register('birthDate')}
           error={errors.birthDate?.message}
@@ -48,13 +48,13 @@ export default function ProfileForm({ user, onSubmit, loading }) {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Cinsiyet
+            Gender
           </label>
           <select
             {...register('gender')}
             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
           >
-            <option value="">Seçiniz</option>
+            <option value="">Select…</option>
             {GENDER_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -67,7 +67,7 @@ export default function ProfileForm({ user, onSubmit, loading }) {
         </div>
 
         <Button type="submit" loading={loading} disabled={!isDirty}>
-          Kaydet
+          Save
         </Button>
       </form>
     </Card>

@@ -23,7 +23,7 @@ export default function HealthWarnings({ warnings = [] }) {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-lg font-semibold text-gray-900">Sağlık Uyarıları</h3>
+      <h3 className="text-lg font-semibold text-gray-900">Health Warnings</h3>
 
       {warnings.map((warning, index) => {
         const Icon = CONDITION_ICONS[warning.condition] || ExclamationTriangleIcon;

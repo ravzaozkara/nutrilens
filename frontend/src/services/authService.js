@@ -59,7 +59,7 @@ export const authService = {
           user: mockUser,
         };
       }
-      throw new Error('Geçersiz e-posta veya şifre');
+      throw new Error('Invalid email or password');
     }
     const { data } = await api.post('/auth/login', { email, password });
     // Store token before getMe() so the request interceptor can attach it.
@@ -130,7 +130,7 @@ export const authService = {
   async changePassword(currentPassword, newPassword) {
     if (USE_MOCK) {
       await new Promise(resolve => setTimeout(resolve, 500));
-      return { success: true, message: 'Şifre başarıyla değiştirildi' };
+      return { success: true, message: 'Password changed successfully' };
     }
     const { data } = await api.put('/auth/password', {
       current_password: currentPassword,

@@ -18,7 +18,7 @@ export default function WeeklyChart({ data = [], target = 1800 }) {
 
   return (
     <Card>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Haftalık Özet</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Weekly Summary</h3>
 
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
@@ -43,7 +43,7 @@ export default function WeeklyChart({ data = [], target = 1800 }) {
                 borderRadius: '12px',
                 boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
               }}
-              formatter={(value) => [`${value} kcal`, 'Kalori']}
+              formatter={(value) => [`${value} kcal`, 'Calories']}
               labelStyle={{ color: '#111827', fontWeight: 600 }}
             />
             <ReferenceLine
@@ -51,7 +51,7 @@ export default function WeeklyChart({ data = [], target = 1800 }) {
               stroke="#9ca3af"
               strokeDasharray="5 5"
               label={{
-                value: 'Hedef',
+                value: 'Goal',
                 position: 'right',
                 fill: '#9ca3af',
                 fontSize: 12,
@@ -74,11 +74,11 @@ export default function WeeklyChart({ data = [], target = 1800 }) {
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded bg-yellow-500" />
-          <span className="text-gray-600">Hedefe yakın</span>
+          <span className="text-gray-600">Near goal</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded bg-red-500" />
-          <span className="text-gray-600">Aşıldı</span>
+          <span className="text-gray-600">Exceeded</span>
         </div>
       </div>
     </Card>

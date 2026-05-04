@@ -31,7 +31,7 @@ export function useMeals(initialParams = {}) {
       });
     } catch (err) {
       setError(err.message);
-      toast.error('Yemekler yüklenirken bir hata oluştu');
+      toast.error('An error occurred while loading meals');
     } finally {
       setLoading(false);
     }
@@ -45,9 +45,9 @@ export function useMeals(initialParams = {}) {
     try {
       await mealService.deleteMeal(id);
       setMeals(prevMeals => prevMeals.filter(meal => meal.id !== id));
-      toast.success('Yemek başarıyla silindi');
+      toast.success('Meal deleted successfully');
     } catch (err) {
-      toast.error('Yemek silinirken bir hata oluştu');
+      toast.error('An error occurred while deleting the meal');
       throw err;
     }
   };
@@ -58,9 +58,9 @@ export function useMeals(initialParams = {}) {
       setMeals(prevMeals =>
         prevMeals.map(meal => (meal.id === id ? { ...meal, ...data } : meal))
       );
-      toast.success('Yemek başarıyla güncellendi');
+      toast.success('Meal updated successfully');
     } catch (err) {
-      toast.error('Yemek güncellenirken bir hata oluştu');
+      toast.error('An error occurred while updating the meal');
       throw err;
     }
   };
@@ -86,7 +86,7 @@ export function useDailySummary() {
         const data = await mealService.getSummary('daily');
         setSummary(data);
       } catch (err) {
-        toast.error('Günlük özet yüklenemedi');
+        toast.error('Could not load daily summary');
       } finally {
         setLoading(false);
       }
@@ -107,7 +107,7 @@ export function useWeeklySummary() {
         const weeklyData = await mealService.getSummary('weekly');
         setData(weeklyData);
       } catch (err) {
-        toast.error('Haftalık özet yüklenemedi');
+        toast.error('Could not load weekly summary');
       } finally {
         setLoading(false);
       }

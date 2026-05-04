@@ -20,7 +20,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="page-container flex items-center justify-center min-h-[60vh]">
-        <Loading size="lg" text="Yükleniyor..." />
+        <Loading size="lg" text="Loading..." />
       </div>
     );
   }
@@ -34,16 +34,16 @@ export default function Dashboard() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              Merhaba, {user?.name?.split(' ')[0]}!
+              Hi, {user?.name?.split(' ')[0]}!
             </h1>
-            <p className="text-gray-600">{formatDate(today, 'dd MMMM yyyy, EEEE')}</p>
+            <p className="text-gray-600">{formatDate(today, 'EEEE, MMMM d, yyyy')}</p>
           </div>
           <Link
             to="/analysis"
             className="inline-flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-medium px-6 py-3 rounded-xl transition-colors"
           >
             <CameraIcon className="w-5 h-5" />
-            Yemek Analiz Et
+            Analyze a Meal
           </Link>
         </div>
       </div>

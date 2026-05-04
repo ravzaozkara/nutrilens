@@ -26,8 +26,8 @@ export default function MealCard({ meal, onView, onDelete }) {
         <div className="flex items-center gap-4 mt-1 text-sm text-gray-600">
           <span>{meal.nutrition.calories} kcal</span>
           <span>P: {meal.nutrition.protein}g</span>
-          <span>K: {meal.nutrition.carbs}g</span>
-          <span>Y: {meal.nutrition.fat}g</span>
+          <span>C: {meal.nutrition.carbs}g</span>
+          <span>F: {meal.nutrition.fat}g</span>
         </div>
       </div>
 
@@ -36,14 +36,14 @@ export default function MealCard({ meal, onView, onDelete }) {
         <button
           onClick={() => onView(meal)}
           className="p-2 text-gray-400 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition-colors"
-          title="Detayları Gör"
+          title="View Details"
         >
           <EyeIcon className="w-5 h-5" />
         </button>
         <button
           onClick={() => onDelete(meal.id)}
           className="p-2 text-gray-400 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors"
-          title="Sil"
+          title="Delete"
         >
           <TrashIcon className="w-5 h-5" />
         </button>

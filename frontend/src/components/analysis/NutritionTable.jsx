@@ -1,12 +1,12 @@
 import Card from '../common/Card';
 
 const nutritionLabels = {
-  calories: { label: 'Kalori', unit: 'kcal' },
+  calories: { label: 'Calories', unit: 'kcal' },
   protein: { label: 'Protein', unit: 'g' },
-  carbs: { label: 'Karbonhidrat', unit: 'g' },
-  fat: { label: 'Yağ', unit: 'g' },
-  fiber: { label: 'Lif', unit: 'g' },
-  sodium: { label: 'Sodyum', unit: 'mg' },
+  carbs: { label: 'Carbs', unit: 'g' },
+  fat: { label: 'Fat', unit: 'g' },
+  fiber: { label: 'Fiber', unit: 'g' },
+  sodium: { label: 'Sodium', unit: 'mg' },
 };
 
 export default function NutritionTable({ nutrition, portion = 1 }) {
@@ -19,9 +19,9 @@ export default function NutritionTable({ nutrition, portion = 1 }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Besin Değerleri</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Nutrition Facts</h3>
         <span className="text-sm text-gray-500">
-          ({portion} porsiyon için)
+          (for {portion} serving{portion === 1 ? '' : 's'})
         </span>
       </div>
 

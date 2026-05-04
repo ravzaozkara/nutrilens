@@ -74,11 +74,11 @@ export default function AnalysisResult({ result, onSave, onReset, saving }) {
             <div className="flex items-center gap-2">
               <CheckBadgeIcon className="w-5 h-5 text-green-500" />
               <span className="text-sm text-gray-600">
-                {Math.round(result.confidence * 100)}% eşleşme
+                {Math.round(result.confidence * 100)}% match
               </span>
             </div>
             <button className="text-sm text-primary-600 hover:text-primary-700 mt-2">
-              Yanlış mı? Manuel girin
+              Wrong? Enter manually
             </button>
           </div>
         </div>
@@ -96,13 +96,13 @@ export default function AnalysisResult({ result, onSave, onReset, saving }) {
       {/* Actions */}
       <div className="space-y-3">
         <Button fullWidth onClick={handleSave} loading={saving}>
-          Günlüğe Kaydet
+          Save to Log
         </Button>
         <button
           onClick={onReset}
           className="w-full text-center text-primary-600 hover:text-primary-700 font-medium py-2"
         >
-          Yeni Analiz
+          New Analysis
         </button>
       </div>
     </div>

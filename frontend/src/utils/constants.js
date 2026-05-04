@@ -1,26 +1,26 @@
 export const HEALTH_CONDITIONS = [
-  { id: 'diabetes', label: 'Diyabet', description: 'Kan şekeri kontrolü gerektirir' },
-  { id: 'hypertension', label: 'Hipertansiyon', description: 'Tansiyon kontrolü gerektirir' },
-  { id: 'kidney', label: 'Böbrek Hastalığı', description: 'Protein ve sodyum kısıtlaması gerektirir' },
+  { id: 'diabetes', label: 'Diabetes', description: 'Requires blood sugar control' },
+  { id: 'hypertension', label: 'Hypertension', description: 'Requires blood pressure control' },
+  { id: 'kidney', label: 'Kidney Disease', description: 'Requires protein and sodium restriction' },
 ];
 
 export const GENDER_OPTIONS = [
-  { value: 'male', label: 'Erkek' },
-  { value: 'female', label: 'Kadın' },
-  { value: 'other', label: 'Belirtmek istemiyorum' },
+  { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+  { value: 'other', label: 'Prefer not to say' },
 ];
 
 export const GOAL_TYPES = [
-  { value: 'lose', label: 'Kilo Ver' },
-  { value: 'maintain', label: 'Koru' },
-  { value: 'gain', label: 'Kilo Al' },
+  { value: 'lose', label: 'Lose Weight' },
+  { value: 'maintain', label: 'Maintain' },
+  { value: 'gain', label: 'Gain Weight' },
 ];
 
 export const DATE_FILTERS = [
-  { value: 'today', label: 'Bugün' },
-  { value: 'week', label: 'Bu Hafta' },
-  { value: 'month', label: 'Bu Ay' },
-  { value: 'all', label: 'Tümü' },
+  { value: 'today', label: 'Today' },
+  { value: 'week', label: 'This Week' },
+  { value: 'month', label: 'This Month' },
+  { value: 'all', label: 'All' },
 ];
 
 export const PORTION_OPTIONS = [
@@ -31,12 +31,12 @@ export const PORTION_OPTIONS = [
 ];
 
 export const BMI_CATEGORIES = [
-  { max: 18.5, label: 'Zayıf', color: 'text-blue-600' },
+  { max: 18.5, label: 'Underweight', color: 'text-blue-600' },
   { max: 24.9, label: 'Normal', color: 'text-green-600' },
-  { max: 29.9, label: 'Fazla Kilolu', color: 'text-yellow-600' },
-  { max: 34.9, label: 'Obez (1. derece)', color: 'text-orange-600' },
-  { max: 39.9, label: 'Obez (2. derece)', color: 'text-red-600' },
-  { max: Infinity, label: 'Obez (3. derece)', color: 'text-red-800' },
+  { max: 29.9, label: 'Overweight', color: 'text-yellow-600' },
+  { max: 34.9, label: 'Obese (Class 1)', color: 'text-orange-600' },
+  { max: 39.9, label: 'Obese (Class 2)', color: 'text-red-600' },
+  { max: Infinity, label: 'Obese (Class 3)', color: 'text-red-800' },
 ];
 
 export const NUTRITION_THRESHOLDS = {

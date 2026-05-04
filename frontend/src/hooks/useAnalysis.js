@@ -17,7 +17,7 @@ export function useAnalysis() {
       return analysisResult;
     } catch (err) {
       setError(err.message);
-      toast.error('Analiz sırasında bir hata oluştu');
+      toast.error('An error occurred during analysis');
       throw err;
     } finally {
       setLoading(false);
@@ -27,10 +27,10 @@ export function useAnalysis() {
   const saveMeal = async (mealData) => {
     try {
       const savedMeal = await mealService.createMeal(mealData);
-      toast.success('Yemek günlüğe kaydedildi');
+      toast.success('Meal saved to your log');
       return savedMeal;
     } catch (err) {
-      toast.error('Yemek kaydedilirken bir hata oluştu');
+      toast.error('An error occurred while saving the meal');
       throw err;
     }
   };

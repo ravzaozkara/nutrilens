@@ -8,28 +8,28 @@ export default function MealHistoryTable({ meals, onView, onDelete }) {
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Tarih
+              Date
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Fotoğraf
+              Photo
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Yemek
+              Meal
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Kalori
+              Calories
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Protein
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Karb
+              Carbs
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Yağ
+              Fat
             </th>
             <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-              İşlemler
+              Actions
             </th>
           </tr>
         </thead>
@@ -74,14 +74,14 @@ export default function MealHistoryTable({ meals, onView, onDelete }) {
                   <button
                     onClick={() => onView(meal)}
                     className="p-1.5 text-gray-400 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition-colors"
-                    title="Detayları Gör"
+                    title="View Details"
                   >
                     <EyeIcon className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => onDelete(meal.id)}
                     className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors"
-                    title="Sil"
+                    title="Delete"
                   >
                     <TrashIcon className="w-5 h-5" />
                   </button>

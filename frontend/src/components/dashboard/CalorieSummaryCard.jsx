@@ -18,7 +18,7 @@ export default function CalorieSummaryCard({ consumed = 0, target = 1800 }) {
 
   return (
     <Card className="flex flex-col items-center">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Günlük Kalori</h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Daily Calories</h3>
 
       {/* Circular Progress */}
       <div className="relative w-48 h-48">
@@ -49,17 +49,17 @@ export default function CalorieSummaryCard({ consumed = 0, target = 1800 }) {
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-3xl font-bold text-gray-900">
-            {consumed.toLocaleString('tr-TR')}
+            {consumed.toLocaleString('en-US')}
           </span>
-          <span className="text-gray-500">/ {target.toLocaleString('tr-TR')} kcal</span>
+          <span className="text-gray-500">/ {target.toLocaleString('en-US')} kcal</span>
         </div>
       </div>
 
       {/* Status text */}
       <p className={`mt-4 font-medium ${color.bg}`}>
         {isOver
-          ? `${Math.abs(remaining).toLocaleString('tr-TR')} kalori aşıldı`
-          : `${remaining.toLocaleString('tr-TR')} kalori kaldı`}
+          ? `${Math.abs(remaining).toLocaleString('en-US')} calories over`
+          : `${remaining.toLocaleString('en-US')} calories remaining`}
       </p>
     </Card>
   );

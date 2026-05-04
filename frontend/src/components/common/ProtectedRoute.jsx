@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children }) {
   const location = useLocation();
 
   if (loading) {
-    return <Loading fullScreen text="Yükleniyor..." />;
+    return <Loading fullScreen text="Loading..." />;
   }
 
   if (!user) {

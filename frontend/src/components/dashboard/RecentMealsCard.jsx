@@ -8,12 +8,12 @@ export default function RecentMealsCard({ meals = [] }) {
   if (meals.length === 0) {
     return (
       <Card>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Son Yemekler</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Meals</h3>
         <EmptyState
           icon={CameraIcon}
-          title="Henüz yemek kaydı yok"
-          description="İlk yemeğinizi analiz ederek başlayın!"
-          actionLabel="Yemek Analiz Et"
+          title="No meals logged yet"
+          description="Start by analyzing your first meal!"
+          actionLabel="Analyze a Meal"
           onAction={() => window.location.href = '/analysis'}
         />
       </Card>
@@ -23,12 +23,12 @@ export default function RecentMealsCard({ meals = [] }) {
   return (
     <Card>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Son Yemekler</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Recent Meals</h3>
         <Link
           to="/history"
           className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
         >
-          Tümünü Gör
+          View All
           <ChevronRightIcon className="w-4 h-4" />
         </Link>
       </div>

@@ -78,16 +78,16 @@ export default function PhotoUploader({ onAnalyze, loading }) {
 
         {/* File info */}
         <p className="text-center text-gray-600">
-          Seçilen dosya: <span className="font-medium">{file.name}</span>
+          Selected file: <span className="font-medium">{file.name}</span>
         </p>
 
         {/* Actions */}
         <div className="flex justify-center gap-3">
           <Button variant="secondary" onClick={handleReset} disabled={loading}>
-            Değiştir
+            Change
           </Button>
           <Button onClick={handleAnalyze} loading={loading}>
-            Analiz Et
+            Analyze
           </Button>
         </div>
       </div>
@@ -114,22 +114,22 @@ export default function PhotoUploader({ onAnalyze, loading }) {
             <CameraIcon className="w-16 h-16 text-gray-400 mb-4" />
           )}
           <p className="text-lg font-medium text-gray-700 mb-2">
-            {isDragActive ? 'Bırakın!' : 'Fotoğrafı buraya sürükleyin'}
+            {isDragActive ? 'Drop it!' : 'Drag a photo here'}
           </p>
-          <p className="text-gray-500">veya bilgisayarınızdan seçin</p>
+          <p className="text-gray-500">or browse from your computer</p>
           <p className="text-sm text-gray-400 mt-2">
-            JPG, PNG veya WebP (max. 10MB)
+            JPG, PNG, or WebP (max. 10MB)
           </p>
         </div>
       </div>
 
       {/* Tips */}
       <div className="bg-gray-50 rounded-xl p-4">
-        <h4 className="font-medium text-gray-900 mb-2">İpuçları:</h4>
+        <h4 className="font-medium text-gray-900 mb-2">Tips:</h4>
         <ul className="text-sm text-gray-600 space-y-1">
-          <li>• Yemeği yukarıdan çekin</li>
-          <li>• İyi aydınlatılmış ortam seçin</li>
-          <li>• Tek bir yemek türü çekin</li>
+          <li>• Photograph the food from above</li>
+          <li>• Choose a well-lit environment</li>
+          <li>• Capture a single dish at a time</li>
         </ul>
       </div>
     </div>
