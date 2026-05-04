@@ -35,7 +35,7 @@ export const analysisService = {
     const formData = new FormData();
     formData.append('file', imageFile);
 
-    const { data } = await api.post('/analyze-image', formData, {
+    const { data } = await api.post('/analyze-image', formData, { timeout: 120000,
       headers: { 'Content-Type': 'multipart/form-data' },
     });
     return normalizeAnalysis(data, imageUrl);
