@@ -1,52 +1,96 @@
+import json
 import os
 from PIL import Image
 
 from .core.config import settings
-from .nutrition import CLASS_NAMES, get_display_name
+from .nutrition import get_display_name
 
 _model = None
+_class_names: list[str] | None = None
+_transform = None
+_device = None
+
+
+def _classes_json_path() -> str:
+    return os.path.join(os.path.dirname(settings.MODEL_PATH), "classes.json")
+
+
+def _load_class_names() -> list[str]:
+    """classes.json'dan model eğitim sırasındaki sınıf isimlerini okur."""
+    global _class_names
+    if _class_names is not None:
+        return _class_names
+
+    with open(_classes_json_path(), encoding="utf-8") as f:
+        _class_names = json.load(f)
+    return _class_names
 
 
 def load_model():
     """
-    EfficientNet-B0 modelini yükler.
-    Model dosyası yoksa None döndürür (simülasyon moduna geçilir).
+    EfficientNet-B0 modelini timm formatında yükler (ml-service ile birebir uyumlu).
+    Model dosyası yoksa veya yüklenemezse None döndürür (simülasyon moduna geçilir).
     """
-    global _model
+    global _model, _device
+
     if _model is not None:
         return _model
 
     if not os.path.exists(settings.MODEL_PATH):
+        print(f"⚠️  Model file not found at {settings.MODEL_PATH} — falling back to simulation mode.")
+        return None
+
+    if not os.path.exists(_classes_json_path()):
+        print(f"⚠️  classes.json not found at {_classes_json_path()} — falling back to simulation mode.")
         return None
 
     try:
         import torch
-        from torchvision.models import efficientnet_b0
+        import timm
 
-        model = efficientnet_b0(weights=None)
-        num_classes = len(CLASS_NAMES)
-        model.classifier[1] = torch.nn.Linear(model.classifier[1].in_features, num_classes)
-        model.load_state_dict(torch.load(settings.MODEL_PATH, map_location="cpu"))
+        class_names = _load_class_names()
+        _device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+        model = timm.create_model(
+            "efficientnet_b0",
+            pretrained=False,
+            num_classes=len(class_names),
+            drop_rate=0.0,
+        )
+        state_dict = torch.load(
+            settings.MODEL_PATH,
+            map_location=_device,
+            weights_only=False,
+        )
+        model.load_state_dict(state_dict)
+        model = model.to(_device)
         model.eval()
+
         _model = model
+        print(f"✅ Model loaded: {len(class_names)} classes (device={_device})")
         return _model
-    except Exception:
+    except Exception as exc:
+        print(f"⚠️  Model load failed: {type(exc).__name__}: {exc} — falling back to simulation mode.")
         return None
 
 
 def get_transform():
-    """ImageNet normalizasyonu ile görüntü dönüşüm pipeline'ı."""
+    """ml-service ile birebir aynı transform: Resize((224,224)) + ToTensor + ImageNet normalize."""
+    global _transform
+    if _transform is not None:
+        return _transform
+
     from torchvision import transforms
 
-    return transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
+    _transform = transforms.Compose([
+        transforms.Resize((224, 224)),
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
-            std=[0.229, 0.224, 0.225]
+            std=[0.229, 0.224, 0.225],
         ),
     ])
+    return _transform
 
 
 def predict_food(image_path: str) -> dict:
@@ -55,7 +99,7 @@ def predict_food(image_path: str) -> dict:
 
     Döndürür:
         {
-            "food_key": str,         # snake_case yemek anahtarı
+            "food_key": str,         # snake_case yemek anahtarı (classes.json sırası)
             "display_name": str,     # Türkçe gösterim adı
             "confidence": float,     # Güven skoru (0.0 - 1.0)
             "is_confident": bool     # Eşiği geçip geçmediği
@@ -68,31 +112,32 @@ def predict_food(image_path: str) -> dict:
 
     import torch
 
-    img = Image.open(image_path).convert("RGB")
+    class_names = _load_class_names()
     transform = get_transform()
-    img_tensor = transform(img).unsqueeze(0)  # Batch boyutu ekle
+
+    img = Image.open(image_path).convert("RGB")
+    tensor = transform(img).unsqueeze(0).to(_device)
 
     with torch.no_grad():
-        output = model(img_tensor)
-        probabilities = torch.nn.functional.softmax(output, dim=1)
-        confidence, predicted_index = torch.max(probabilities, 1)
-        confidence = confidence.item()
-        predicted_index = predicted_index.item()
+        probs = torch.softmax(model(tensor), dim=1)[0]
+        confidence_t, predicted_t = torch.max(probs, dim=0)
+        confidence = float(confidence_t.item())
+        predicted_index = int(predicted_t.item())
 
-    food_key = CLASS_NAMES[predicted_index] if predicted_index < len(CLASS_NAMES) else "bilinmeyen"
+    food_key = class_names[predicted_index] if predicted_index < len(class_names) else "bilinmeyen"
 
     return {
         "food_key": food_key,
         "display_name": get_display_name(food_key),
         "confidence": round(confidence, 4),
-        "is_confident": confidence >= settings.CONFIDENCE_THRESHOLD
+        "is_confident": confidence >= settings.CONFIDENCE_THRESHOLD,
     }
 
 
 def _simulate_prediction(image_path: str) -> dict:
     """
-    Model dosyası mevcut olmadığında kullanılan simülasyon.
-    Görselin geçerli olduğunu doğrular ve rastgele bir tahmin döndürür.
+    Yalnızca model gerçekten yüklenemediğinde devreye girer.
+    Görselin geçerliliğini doğrular ve rastgele bir tahmin döndürür.
     """
     import random
 
@@ -104,15 +149,21 @@ def _simulate_prediction(image_path: str) -> dict:
             "food_key": "bilinmeyen",
             "display_name": "Geçersiz Görsel",
             "confidence": 0.0,
-            "is_confident": False
+            "is_confident": False,
         }
 
-    food_key = random.choice(CLASS_NAMES)
+    try:
+        class_names = _load_class_names()
+    except Exception:
+        from .nutrition import CLASS_NAMES
+        class_names = CLASS_NAMES
+
+    food_key = random.choice(class_names)
     confidence = round(random.uniform(0.40, 0.95), 4)
 
     return {
         "food_key": food_key,
         "display_name": get_display_name(food_key),
         "confidence": confidence,
-        "is_confident": confidence >= settings.CONFIDENCE_THRESHOLD
+        "is_confident": confidence >= settings.CONFIDENCE_THRESHOLD,
     }

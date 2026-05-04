@@ -32,6 +32,7 @@ six==1.17.0
 slowapi==0.1.9
 SQLAlchemy==2.0.46
 starlette==0.52.1
+timm==1.0.26
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 uvicorn==0.40.0
